@@ -40,12 +40,17 @@ window.addEventListener("DOMContentLoaded", () => {
     const modalOpen = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector(".modal")
 
+    function openModal() {
+        modal.style.display = "block"
+        document.body.style.overflow = "hidden"
+        clearInterval(modalTimerId)
+    }
+
     modalOpen.forEach(item => {
         item.addEventListener("click", () => {
             // modal.classList.add('show')
             // modal.classList.remove('hide')
-            modal.style.display = "block"
-            document.body.style.overflow = "hidden"
+            openModal()
         })
     })
     function closeModal() {
@@ -70,6 +75,17 @@ window.addEventListener("DOMContentLoaded", () => {
             closeModal()
         }
     })
+
+    const modalTimerId = setTimeout(openModal, 5000)
+
+//Функція що відображає модалку один раз у випадку, якщо проскролили до кінця сторінки
+    function showModalByScrool() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal()
+            window.removeEventListener("scroll", showModalByScrool)
+        }
+    }
+    window.addEventListener("scroll", showModalByScrool)
 
 })
 
