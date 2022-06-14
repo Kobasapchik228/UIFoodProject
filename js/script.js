@@ -41,42 +41,38 @@ window.addEventListener("DOMContentLoaded", () => {
         modal = document.querySelector(".modal")
 
     function openModal() {
-        modal.style.display = "block"
-        document.body.style.overflow = "hidden"
-        clearInterval(modalTimerId)
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
     }
 
     modalOpen.forEach(item => {
         item.addEventListener("click", () => {
-            // modal.classList.add('show')
-            // modal.classList.remove('hide')
             openModal()
         })
     })
     function closeModal() {
-        modal.style.display = "none"
-        document.body.style.overflow = ""
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
     }
 
-    document.querySelector('[data-close]').addEventListener("click", () => {
-        // modal.classList.add('hide')
-        //modal.classList.remove('show')
-        closeModal()
-    })
+
 
     modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
+        if (e.target === modal || e.target.getAttribute(`data-close`) == ``) {
             closeModal()
         }
     })
 
     document.addEventListener("keydown", (e) => {
-        if (e.code === "Escape" /**&& modal.classList.contains('show')*/) {
+        if (e.code === "Escape" && modal.classList.contains('show')) {
             closeModal()
         }
     })
 
-    // const modalTimerId = setTimeout(openModal, 15000)
+    const modalTimerId = setTimeout(openModal, 50000)
 
     //Функція що відображає модалку один раз у випадку, якщо проскролили до кінця сторінки
     function showModalByScrool() {
@@ -163,7 +159,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll(`form`)
 
     const message = {
-        loading: `Загрузка`,
+        loading: `img/form/spinner.svg`,
         success: `Дякую, скоро ми з Вами зв'яжемось`,
         failure: `Щось пішло не так `
     }
@@ -176,11 +172,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
         form.addEventListener(`submit`, (e) => {
             e.preventDefault()
-            const statusMessage = document.createElement(`div`)
-            statusMessage.classList.add(`status`)
-            statusMessage.textContent = message.loading
+            const statusMessage = document.createElement(`img`)
+            statusMessage.src = message.loading
+            statusMessage.style.cssText = `
+            display: block;
+            margin: 0 auto
+            `
             form.append(statusMessage)
-
+            
             const request = new XMLHttpRequest()
             request.open(`POST`, `server.php`)
 
@@ -192,12 +191,37 @@ window.addEventListener("DOMContentLoaded", () => {
             request.addEventListener(`load`, () => {
                 if (request.status === 200) {
                     console.log(request.response)
-                    statusMessage.textContent = message.success
+                    showThanksModal(message.success)
+                    form.reset()
+                    statusMessage.remove()
                 } else {
-                    statusMessage.textContent = message.failure
+                    showThanksModal(message.failure)
                 }
             })
         })
+    }
+
+    function showThanksModal(message) {
+        const prevModalDialog = document.querySelector(`.modal__dialog`)
+
+        prevModalDialog.classList.add('hide')
+        openModal()
+
+        const thanksModal = document.createElement(`div`)
+        thanksModal.classList.add(`modal__dialog`)
+        thanksModal.innerHTML = `
+        <div class="modal__content">
+        <div class="modal__close" data-close>&times;</div>
+        <div class="modal__title">${message}</div>
+        </div>
+        `
+        document.querySelector(`.modal`).append(thanksModal)
+        setTimeout(() => {
+            thanksModal.remove()
+            prevModalDialog.classList.add('show')
+            prevModalDialog.classList.remove('hide')
+            closeModal()
+        }, 4000)
     }
 })
 
