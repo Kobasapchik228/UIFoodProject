@@ -179,25 +179,57 @@ window.addEventListener("DOMContentLoaded", () => {
             margin: 0 auto
             `
             form.append(statusMessage)
-            
-            const request = new XMLHttpRequest()
-            request.open(`POST`, `server.php`)
 
-            // request.setRequestHeader(`Content-type`, `multipart/form-data`)
+
+            // request.setRequestHeader(`Content-type`, `multipart/form-data`) 
+            //При формдаті заголовки не потрібні
+
             const formData = new FormData(form)
+            //--------------------------------Перетворення формДати в JSON------------
+            const object = {}
+            formData.forEach(function (value, key) {
+                object[key] = value
+            })  
+            
 
-            request.send(formData)
 
-            request.addEventListener(`load`, () => {
-                if (request.status === 200) {
-                    console.log(request.response)
-                    showThanksModal(message.success)
-                    form.reset()
-                    statusMessage.remove()
-                } else {
-                    showThanksModal(message.failure)
-                }
+            //--------------------------------Fetch------------
+            
+            fetch('server.php', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(object)
             })
+                .then(data => data.text())
+                .then(data => {
+                    console.log(data)
+                    showThanksModal(message.success)
+                    statusMessage.remove()
+                })
+                .catch(() => {
+                    showThanksModal(message.failure)
+                })
+                .finally(() => {
+                    form.reset()
+                })
+
+
+            //--------------------------XMLHTTPSREquest----------------------------
+            // const request = new XMLHttpRequest()
+            // request.open(`POST`, `server.php`)
+            // const formData = new FormData(form) //Якщо розкоменуємо беремо до уваги що зверху є формдата
+            // request.addEventListener(`load`, () => {
+            //     if (request.status === 200) {
+            //         console.log(request.response)
+            //         showThanksModal(message.success)
+            //         form.reset()
+            //         statusMessage.remove()
+            //     } else {
+            //         showThanksModal(message.failure)
+            //     }
+            // })
         })
     }
 
@@ -223,5 +255,7 @@ window.addEventListener("DOMContentLoaded", () => {
             closeModal()
         }, 4000)
     }
+
+
 })
 
