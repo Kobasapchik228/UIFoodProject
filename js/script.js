@@ -189,12 +189,12 @@ window.addEventListener("DOMContentLoaded", () => {
             const object = {}
             formData.forEach(function (value, key) {
                 object[key] = value
-            })  
-            
+            })
+
 
 
             //--------------------------------Fetch------------
-            
+
             fetch('server.php', {
                 method: "POST",
                 headers: {
@@ -255,6 +255,10 @@ window.addEventListener("DOMContentLoaded", () => {
             closeModal()
         }, 4000)
     }
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res))
 
 
 })
