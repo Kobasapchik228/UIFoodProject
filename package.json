@@ -1,0 +1,22 @@
+{
+  "name": "tabs-modal-class",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kobasapchik228/Tabs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kobasapchik228/Tabs/issues"
+  },
+  "homepage": "https://github.com/Kobasapchik228/Tabs#readme",
+  "devDependencies": {
+    "json-server": "^0.17.0"
+  }
+}
