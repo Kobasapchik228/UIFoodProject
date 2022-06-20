@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-    //Tabs
+    //-----------------------------------------Tabs
     const tabs = document.querySelectorAll(".tabheader__item"),
         tabsContent = document.querySelectorAll(".tabcontent"),
         tabsParent = document.querySelector(".tabheader__items");
@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    //Modal window
+    //--------------------------------------------Modal window
     const modalOpen = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector(".modal")
 
@@ -84,7 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", showModalByScrool)
 
 
-    //Використовуємо класи для карток
+    //---------------------------------------Використовуємо класи для карток
     class MenuCard {
         constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
@@ -142,7 +142,7 @@ window.addEventListener("DOMContentLoaded", () => {
             })
         })
 
-        //Функція коли не потрібна шаблонізація і немає класу, знизу
+    //Функція коли не потрібна шаблонізація і немає класу, знизу
 
     // getResource(`http://localhost:3000/menu`)
     //     .then(data =>
@@ -170,7 +170,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
-    //Forms
+    //---------------------------------------------Forms
 
     const forms = document.querySelectorAll(`form`)
 
@@ -188,7 +188,7 @@ window.addEventListener("DOMContentLoaded", () => {
     //Оскільки проміс це асинхронний код то потрібно використовувати async/await, бо 
     //якщо ми цього не зробило при return буде помилка
 
-    //Фкнція для того, щоб запостити дані на сервер 
+    //Фунція для того, щоб запостити дані на сервер 
     const postData = async (url, data) => {
         const res = await fetch(url, {
             method: "POST",
@@ -291,6 +291,131 @@ window.addEventListener("DOMContentLoaded", () => {
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res))
+
+    //----------------------------Slider  first version
+
+    // const slides = document.querySelectorAll('.offer__slide'),
+    //     prev = document.querySelector('.offer__slider-prev'),
+    //     next = document.querySelector('.offer__slider-next'),
+    //     total = document.querySelector('#total'),
+    //     current = document.querySelector('#current')
+    // let slideIndex = 1;
+
+
+    // showSlide(slideIndex);
+    // if (slides.length < 10) {
+    //     total.textContent = `0${slides.length}`
+    // } else {
+    //     total.textContent = slides.length
+    // }
+
+
+    // function showSlide(n) {
+    //     if (n > slides.length) {
+    //         slideIndex = 1
+    //     }
+    //     if (n < 1) {
+    //         slideIndex = slides.length
+    //     }
+
+    //     slides.forEach(item => item.style.display = 'none')
+
+    //     slides[slideIndex - 1].style.display = 'block'
+
+    //     if (slides.length < 10) {
+    //         current.textContent = `0${slideIndex}`
+    //     } else {
+    //         current.textContent = slideIndex
+    //     }
+    // }
+
+
+    // function plusSlide(n) {
+    //     showSlide(slideIndex += n)
+    // }
+
+
+    // prev.addEventListener('click', () => {
+    //     plusSlide(-1)
+    // })
+    // next.addEventListener('click', () => {
+    //     plusSlide(1)
+    // })
+
+
+    //-----------------------------------------------Slider second version
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next'),
+        total = document.querySelector('#total'),
+        current = document.querySelector('#current'),
+        slidesWrapper = document.querySelector(`.offer__slider-wrapper`),
+        slidesField = document.querySelector('.offer__slider-inner'),
+        width = window.getComputedStyle(slidesWrapper).width;
+    let slideIndex = 1;
+    let offset = 0;
+
+    if (slides.length < 10) {
+        total.textContent = `0${slides.length}`
+        current.textContent = `0${slideIndex}`
+    } else {
+        total.textContent = slides.length
+        current.textContent = slideIndex
+    }
+
+    slidesField.style.width = 100 * slides.length + '%'
+    slidesField.style.display = 'flex'
+    slidesField.style.transition = `0.5s all`
+    slidesWrapper.style.overflow = 'hidden'
+
+    slides.forEach(slide => {
+        slide.style.width = width
+    })
+
+    next.addEventListener('click', () => {
+        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+            offset = 0;
+        } else {
+            offset += +width.slice(0, width.length - 2)
+        }
+        slidesField.style.transform = `translateX(-${offset}px)`
+
+        if (slideIndex == slides.length) {
+            slideIndex = 1
+        } else {
+            slideIndex++
+        }
+
+        if (slides.length < 10) {
+            current.textContent = `0${slideIndex}`
+        } else {
+            current.textContent = slideIndex
+        }
+    })
+
+    prev.addEventListener('click', () => {
+        if (offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1)
+        } else {
+            offset -= +width.slice(0, width.length - 2)
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`
+
+
+        if (slideIndex == 1) {
+            slideIndex = slides.length
+        } else {
+            slideIndex--
+        }
+
+        if (slides.length < 10) {
+            current.textContent = `0${slideIndex}`
+        } else {
+            current.textContent = slideIndex
+        }
+    })
 
 
 })
