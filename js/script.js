@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-    //-----------------------------------------Tabs
+    //-----------------------------------------Tabs---------------------------
     const tabs = document.querySelectorAll(".tabheader__item"),
         tabsContent = document.querySelectorAll(".tabcontent"),
         tabsParent = document.querySelector(".tabheader__items");
@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    //--------------------------------------------Modal window
+    //--------------------------------------------Modal window-----------------------
     const modalOpen = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector(".modal")
 
@@ -84,7 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", showModalByScrool)
 
 
-    //---------------------------------------Використовуємо класи для карток
+    //---------------------------------------Use class for cards
     class MenuCard {
         constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
@@ -374,7 +374,7 @@ window.addEventListener("DOMContentLoaded", () => {
     slides.forEach(slide => {
         slide.style.width = width
     })
-      
+
     //added nav 
     slider.style.position = `relative`
 
@@ -432,13 +432,17 @@ window.addEventListener("DOMContentLoaded", () => {
         dots.forEach(dot => dot.style.opacity = `.5`);
         dots[slideIndex - 1].style.opacity = 1;
     }
-   
+
+    function changeValueWithRegular(string) {
+        return +string.replace(/\D/g, '')
+    }
+
 
     next.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if (offset == changeValueWithRegular(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2)
+            offset += changeValueWithRegular(width)
         }
         slidesField.style.transform = `translateX(-${offset}px)`
 
@@ -455,9 +459,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1)
+            offset = changeValueWithRegular(width) * (slides.length - 1)
         } else {
-            offset -= +width.slice(0, width.length - 2)
+            offset -= changeValueWithRegular(width)
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`
@@ -477,7 +481,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const slideTo = e.target.getAttribute(`data-slide-to`)
 
             slideIndex = slideTo
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1)
+            offset = changeValueWithRegular(width) * (slideTo - 1)
             slidesField.style.transform = `translateX(-${offset}px)`
 
             appointCurrentValue()
