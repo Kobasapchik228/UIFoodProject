@@ -598,6 +598,71 @@ window.addEventListener("DOMContentLoaded", () => {
     getDynamicInformation('#age')
 
 
+    //------------------------------------------Timer-----------------------------------
+    const dateWhenThePromotionEnd = new Date("2022-07-20")
+    let timer = document.querySelector('.timer')
+
+    function parsingDateDates() {
+        let difference = Date.parse(dateWhenThePromotionEnd) - Date.parse(new Date())
+        let days, hours, minutes, seconds
+        if (difference <= 0) {
+            days = 0,
+                hours = 0,
+                minutes = 0,
+                seconds = 0
+        } else {
+            days = Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours = Math.floor(difference / (1000 * 60 * 60) % 24),
+                minutes = Math.floor(difference / (1000 * 60) % 60),
+                seconds = Math.floor((difference / 1000) % 60)
+        }
+
+        return {
+            t: difference,
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        }
+    }
+
+    function setClock(endTime) {
+        let days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            seconds = timer.querySelector('#seconds')
+
+        let timerId = setInterval(updateClock, 1000)
+        updateClock()
+
+        function updateClock() {
+            const t = parsingDateDates(endTime)
+            days.textContent = getZero(t.days),
+                hours.textContent = getZero(t.hours),
+                seconds.textContent = getZero(t.seconds),
+                minutes.textContent = getZero(t.minutes)
+
+            if (t.difference <= 0) {
+                clearInterval(timerId)
+            }
+
+        }
+
+        function getZero(num) {
+            if (num >= 0 && num < 10) {
+                return `0${num}`
+            } else {
+                return num
+            }
+        }
+
+    }
+    setClock(dateWhenThePromotionEnd)
+
+
+
+
+
 
 })
 
